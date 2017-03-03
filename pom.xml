@@ -425,6 +425,7 @@
 		<module>opennlp-morfologik-addon</module>
 		<module>opennlp-docs</module>
 		<module>opennlp-distr</module>
+		<module>opennlp-site</module>
 	</modules>
 
 </project>

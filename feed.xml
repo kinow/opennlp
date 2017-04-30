@@ -24,8 +24,8 @@
     <atom:link href="http://jbake.org/feed.xml" rel="self" type="application/rss+xml" />
     <description>JBake - Java based open source static site/blog generator for developers</description>
     <language>en-gb</language>
-    <pubDate>Sun, 30 Apr 2017 20:30:19 +1200</pubDate>
-    <lastBuildDate>Sun, 30 Apr 2017 20:30:19 +1200</lastBuildDate>
+    <pubDate>Sun, 30 Apr 2017 20:45:32 +1200</pubDate>
+    <lastBuildDate>Sun, 30 Apr 2017 20:45:32 +1200</lastBuildDate>
 
     <item>
       <title>Apache OpenNLP 1.7.2 released</title>

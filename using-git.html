@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>OpenNLP is candidated to Apache Incubation! - Apache OpenNLP</title>
+    <title>Using Git - Apache OpenNLP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Apache OpenNLP  is a machine learning based toolkit for the processing of natural language text." />
@@ -167,39 +167,145 @@ body {
 </nav>
 
 <div class="container">
-    <h1 class="title">OpenNLP is candidated to Apache Incubation!</h1>
+    <h1 class="title">Using Git</h1>
 
-    <div class="paragraph">
-<p>OpenNLP Proposal presented to general list for incubator.</p>
+    <div class="sect1">
+<h2 id="introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Apache OpenNLP project has a series of rules that every developer must adhere to. The contents in this page
+can be helpful even to experienced developers, as it includes information about merging GitHub pull requests
+programmatically, which is not an easy task, or sometimes users are more familiar with the web interface.</p>
+</div>
+<div class="paragraph">
+<p>Simple rules include always merging pull requests with the fast-forward, using a JIRA ticket ID in the commit message
+whenever possible, and always squashing pull requests. Also, changes are verified by a build server, so developers
+must remember to check if all tests pass, as well as other quality checks such as code style.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cloning_the_opennlp_git_repository">Cloning the OpenNLP Git repository</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After obtaining committership to OpenNLP, you probably want to submit your changes to the project source repository.
+This section contains the steps that every committer must follow, in order to make sure every developer is following
+the workflow, and have a consistent and simple commit tree.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>git clone https://git-wip-us.apache.org/repos/asf/opennlp.git
+cd opennlp
+git config user.name "Your Name"
+git config user.email "your-email"
+git config merge.ff only</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also clone the project web site repository.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>https://git-wip-us.apache.org/repos/asf/opennlp.git
+# repeat remaining steps as above</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In order to test your commit rights, and following a project tradition, normally the first commit of every new
+member is to add his/her name to the list of project members. Look for the <code>team.ad</code> source file in the web site
+repository, add your name, and try sending your first commit.</p>
+</div>
+<div class="paragraph">
+<p>For a complete list of the project repositories, visit the <a href="/source-code.html">Source Code</a> section.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="merging_pull_requests">Merging Pull Requests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section documents the process of merging code changes contributed via
+<a href="https://help.github.com/articles/about-pull-requests/">Github Pull Requests</a>. It is important to
+remember to <strong>always merge with <a href="https://git-scm.com/docs/git-merge">fast-forward</a></strong>. If you followed the steps in
+the first section, your local working copy should be already configured for that. Otherwise, remember to use <code>ff-only</code>
+when merging.</p>
+</div>
+<div class="sect2">
+<h3 id="adding_a_remote_repository_pointing_to_github">Adding a remote repository pointing to GitHub</h3>
+<div class="paragraph">
+<p>In order to fetch the pull requests in GitHub, you need to add a remote repository.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>git remote add github https://github.com/apache/opennlp.git
+git fetch --all
+git fetch github pull/&lt;PULL-ID&gt;/head:&lt;BRANCHNAME&gt;
+git checkout &lt;BRANCHNAME&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replacing <code>&lt;PULL-ID&gt;</code> by the GitHub pull request ID (you can find it in the pull request URL) and <code>&lt;BRANCHNAME&gt;</code> by
+the name of the new local branch. If you have suggestions to enhance or fix the pull request, send your comments via
+the GitHub user interface, or add a comment to the JIRA ticket &mdash; if any.</p>
+</div>
+<div class="paragraph">
+<p>Once you are happy with the changes, you can check out the master branch, and merge the pull request. Remember
+to make sure the <strong>branch has been rebase&#8217;d against master</strong>, and also that all tests pass.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>git checkout master
+git merge --ff-only &lt;BRANCHNAME&gt;
+git push origin master</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In case other commits happened after the pull request was submitted, you must ask the user to rebase the pull
+request against the master branch, and squash his commit. An alternative for that, is to rebase and squash the commits
+yourself, when there is no feedback from the user.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>git checkout &lt;BRANCHNAME&gt;
+git rebase master
+# squash and amend the commit message if necessary...
+git checkout master
+git merge --ff-only &lt;BRANCHNAME&gt;
+git push origin master</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="stale_pull_requests">Stale Pull Requests</h3>
+<div class="paragraph">
+<p>You can automatically close a pull request when merging, by amending the commit message. Make sure to use the following
+syntax in your commit message.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Merging branch &lt;BRANCHNAME&gt;
+OPENNLP-&lt;JIRA-ID&gt;: This closes #&lt;PULL-ID&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where <code>&lt;JIRA-ID&gt;</code> is the JIRA ticket ID, and <code>#&lt;PULL-ID&gt;</code> refers to the pull request ID. Once you push this commit,
+JIRA will index your git message and will add it as a comment in the ticket, and the ASF Infra bot should automatically
+close the pull request within minutes.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, the user who submitted the pull request can also close the pull request via GitHub&#8217;s
+user interface. Or, as a final resort, any developer can use an empty commit to close it.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>git commit --allow-empty -m "OPENNLP-&lt;JIRA-ID&gt;: This closes #&lt;PULL-ID&gt;"
+git push</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 
-    <p><em>18 November 2010</em></p>
-    <div id="share"><!-- Google Plus -->
-<div class="g-plusone" data-size="medium"></div>
-<script type="text/javascript">
-  window.___gcfg = {lang: 'en-GB'};
-
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script>
-
-<!-- Twitter -->
-<a href="https://twitter.com/share" class="twitter-share-button" data-dnt="true">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-<!-- Facebook -->
-<div class="fb-like" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true"></div>
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script></div>
 </div>
 
     <footer class='footer'>
